@@ -26,8 +26,9 @@ should work with newer versions, but it's not guaranteed.
 ---------------
 
 Download the latest release from 
-<https://github.com/gynter/Clevercube/tags> and extract the 
-archive to the Roundcube webmail plugins directory.
+<https://github.com/gynter/Clevercube/tags> and copy the contents of
+the extracted archive's directory to to the Roundcube webmail
+plugins directory.
 
 Development files can be browsed via web browser or can be optained 
 from a git repository <https://github.com/gynter/Clevercube>.
