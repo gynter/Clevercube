@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packagerversion="1.9.0" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0
+    http://pear.php.net/dtd/package-2.0.xsd">
+    <name>Clevercube</name>
+    <channel>pear.php.net</channel>
+    <summary>Various plug-ins for the Roundcube webmail.</summary>
+    <description>Various plug-ins for the Roundcube webmail.</description>
+    <lead>
+        <name>Günter Kits</name>
+        <user>gynter</user>
+        <email>gynter@kits.ee</email>
+        <active>yes</active>
+    </lead>
+    <date>2012-08-29</date>
+    <version>
+        <release>0.1</release>
+        <api>0.1</api>
+    </version>
+    <stability>
+        <release>stable</release>
+        <api>stable</api>
+    </stability>
+    <license uri="https://github.com/gynter/Clevercube/blob/master/clevercube/LICENSE">MIT</license>
+    <notes />
+    <contents>
+        <dir name="/" baseinstalldir="../">
+            <dir name="clevercube">
+                <dir name="config">
+                    <file name="config.inc.php.dist" role="data" />
+                </dir>
+                <file name=".htaccess" role="data" />
+                <file name="clevercube.php" role="php" />
+                <file name="CHANGELOG.md" role="data" />
+                <file name="LICENSE" role="data" />
+                <file name="README.md" role="data" />
+                <file name="package.xml" role="data" />
+            </dir>
+            <dir name="cc_external_database">
+                <dir name="config">
+                    <file name="config.inc.php.dist" role="data" />
+                </dir>
+                <file name=".htaccess" role="data" />
+                <file name="cc_external_database.php" role="php" />
+            </dir>
+            <dir name="cc_external_auth">
+                <dir name="config">
+                    <file name="config.inc.php.dist" role="data" />
+                </dir>
+                <file name=".htaccess" role="data" />
+                <file name="cc_external_auth.php" role="php" />
+            </dir>
+            <dir name="cc_ar_manager">
+                <dir name="api">
+                    <file name="api.php" role="php" />
+                    <file name="example.php" role="php" />
+                </dir>
+                <dir name="config">
+                    <file name="config.inc.php.dist" role="data" />
+                    <file name="example.inc.php.dist" role="data" />
+                </dir>
+                <dir name="localization">
+                    <file name="en_US.inc" role="data" />
+                    <file name="et_EE.inc" role="data" />
+                </dir>
+                <dir name="skins">
+                    <dir name="classic">
+                        <dir name="templates">
+                            <file name="edit.html" role="data" />
+                        </dir>
+                        <file name="cc_ar_manager.js" role="data" />
+                    </dir>
+                    <dir name="larry">
+                        <dir name="templates">
+                            <file name="edit.html" role="data" />
+                        </dir>
+                    </dir>
+                    <file name=".htaccess" role="data" />
+                </dir>
+                <file name=".htaccess" role="data" />
+                <file name="cc_ar_manager.php" role="php" />
+            </dir>
+        </dir>
+    </contents>
+    <dependencies>
+        <required>
+            <php>
+                <min>5.2.17</min>
+            </php>
+            <pearinstaller>
+                <min>1.9.1</min>
+            </pearinstaller>
+        </required>
+    </dependencies>
+</package>

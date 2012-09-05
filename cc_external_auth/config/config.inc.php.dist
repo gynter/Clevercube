@@ -1,0 +1,65 @@
+<?php
+
+/*
+ +---------------------------------------------------------------------+
+ | Clevercube External authentication plugin.                          |
+ |                                                                     |
+ | Copyright (c) 2012 Günter Kits                                      |
+ |                                                                     |
+ | Permission is hereby granted, free of charge, to any person         |
+ | obtaining a copy of this software and associated documentation      |
+ | files (the "Software"), to deal in the Software without             |
+ | restriction, including without limitation the rights to use, copy,  |
+ | modify, merge, publish, distribute, sublicense, and/or sell copies  |
+ | of the Software, and to permit persons to whom the Software is      |
+ | furnished to do so, subject to the following conditions:            |
+ |                                                                     |
+ | The above copyright notice and this permission notice shall be      |
+ | included in all copies or substantial portions of the Software.     |
+ |                                                                     |
+ | THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,     |
+ | EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF  |
+ | MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND               |
+ | NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS |
+ | BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN  |
+ | ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN   |
+ | CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE    |
+ | SOFTWARE.                                                           |
+ +---------------------------------------------------------------------+
+*/
+
+# Array of the GET variables, which will be sent to all URLs:
+#   http://www.example.org/login.php?user=%u&message=%m
+# Possible placeholders:
+#   %u user's login name
+#   %h e-mail server host
+#   %n user's name part
+#   %d user's domain part (if present)
+#   %m return message
+# SECURITY: Sending user login names or other user related data
+# may be a security risk!
+
+# Login page URL.
+# Possible values:
+#      URL         Web page url (http://www.example.org/login.php);
+#      null/false  Disable the redirection.
+$rcmail_config['external_auth_login'] = null;
+
+# Login error page URL. User will be redirected to this page 
+# if logging in fails, session is illegal or session has timed out.
+# Possible values:
+#      URL         Web page url (http://www.example.org/login.php);
+#      null        Use the login page, if set. Otherwise disable;
+#      false       Disable the redirection.
+$rcmail_config['external_auth_error'] = null;
+
+# Logout page URL. User will be redirected to this page after
+# logging out.
+# Possible values:
+#      URL         Web page url (http://www.example.org/login.php);
+#      null        Use the login page, if set. Otherwise disable;
+#      false       Disable the redirection.
+$rcmail_config['external_auth_logout'] = null;
+
+// end of config file
+?>

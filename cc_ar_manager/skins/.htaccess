@@ -1,0 +1,3 @@
+# Deny access to the files.
+Order deny,allow
+Allow from all
