@@ -106,6 +106,7 @@ installation.
             <input name="_action" value="login" type="hidden" />
             User <input name="_user" type="text" /><br />
             Pass <input name="_pass" type="password" /><br />
+            <input type="hidden" name="_task" value="login">
             <input type="hidden" name="_action" value="login" />
             <input type="submit" />
         </form>
