@@ -13,10 +13,10 @@
         <email>gynter@kits.ee</email>
         <active>yes</active>
     </lead>
-    <date>2012-08-29</date>
+    <date>2013-03-16</date>
     <version>
-        <release>0.1</release>
-        <api>0.1</api>
+        <release>0.2</release>
+        <api>0.2</api>
     </version>
     <stability>
         <release>stable</release>

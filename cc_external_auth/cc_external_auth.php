@@ -125,8 +125,14 @@ class cc_external_auth extends rcube_plugin
     }
 
     public function login_failed($args)
-    { 
-        $this->location($this->login_error_url, rcube_label($args['code'] < -1 ? 'storageerror' : 'loginfailed'), $args);
+    {
+        $error_labels = array(
+            RCMAIL::ERROR_STORAGE          => 'storageerror',
+            RCMAIL::ERROR_COOKIES_DISABLED => 'cookiesdisabled',
+            RCMAIL::ERROR_INVALID_REQUEST  => 'invalidrequest',
+            RCMAIL::ERROR_INVALID_HOST     => 'invalidhost',
+        );
+        $this->location($this->login_error_url, rcube_label(array_key_exists($args['code'], $error_labels) ? $error_labels[$args['code']] : 'loginfailed'), $args);
     }
 
     public function logout_redirect($args)  
