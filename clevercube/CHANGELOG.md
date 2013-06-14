@@ -3,6 +3,8 @@ CHANGELOG Clevercube
 ========================================================================
 ------------------------------------------------------------------------
 
+RELEASE 0.3
+-----------------
 - Compatibility to 0.9 with backwards compatibility to 0.8 (#2, #3);
 - Pushed year to 2013 in LICENSE and headers;
 - Fixed `null` login page redirection to failed page (#4).
