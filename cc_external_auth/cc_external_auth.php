@@ -4,7 +4,7 @@
  +---------------------------------------------------------------------+
  | Clevercube External authentication plugin.                          |
  |                                                                     |
- | Copyright (c) 2012 Günter Kits                                      |
+ | Copyright (c) 2013 Günter Kits                                      |
  |                                                                     |
  | Permission is hereby granted, free of charge, to any person         |
  | obtaining a copy of this software and associated documentation      |
@@ -32,10 +32,14 @@ class cc_external_auth extends rcube_plugin
 {
     public $task = 'login|logout';
 
+    private $rc;
+    private $config;
+
     public function init()
     {
-        $rcmail = rcmail::get_instance();
-        $config = $this->api->config;
+        $this->rc = rcmail::get_instance();
+        $this->config = $this->rc->config;
+
         # Load distribution configuration.
         $this->load_config('config/config.inc.php.dist');
         # Overwrite configuration values with user defined ones.
@@ -49,9 +53,9 @@ class cc_external_auth extends rcube_plugin
         $this->add_hook('logout_after', array($this,'logout_redirect'));
 
         # Get the redirection URLs from config.
-        $this->login_redirect_url = $config->get('external_auth_login');
-        $this->login_error_url = $config->get('external_auth_error');
-        $this->login_logout_url = $config->get('external_auth_logout');
+        $this->login_redirect_url = $this->config->get('external_auth_login');
+        $this->login_error_url = $this->config->get('external_auth_error');
+        $this->login_logout_url = $this->config->get('external_auth_logout');
 
         if (empty($this->login_redirect_url))
             $this->login_redirect_url = false;
@@ -63,8 +67,6 @@ class cc_external_auth extends rcube_plugin
 
     private function location($url, $message, $args)
     {
-        $rcmail = rcmail::get_instance();
-
         if ($url === false)
             return false;
         $user = $args['user'];
@@ -76,7 +78,7 @@ class cc_external_auth extends rcube_plugin
         $url = str_replace('%n', urlencode($name), $url);
         $url = str_replace('%d', urlencode($domain), $url);
 
-        $rcmail->kill_session();
+        $this->rc->kill_session();
         header("Location: $url");
         exit;
     }
@@ -90,7 +92,7 @@ class cc_external_auth extends rcube_plugin
 
     public function authenticate($args)
     {
-        if (!empty($_POST['_user']) && !empty($_POST['_pass']) && $_POST['_action'] == 'login')
+        if (!empty($_POST['_user']) && !empty($_POST['_pass']) && $this->rc->action == 'login' && $this->rc->task == 'login')
         {
             $args['valid'] = true;
             $args['cookiecheck'] = false;
@@ -102,11 +104,10 @@ class cc_external_auth extends rcube_plugin
     {
         if ($args['template'] == 'login')
         {
-            $rcmail = rcmail::get_instance();
             $url = $this->login_redirect_url;
             $msg = '';
 
-            if (!$rcmail->session->check_auth())
+            if (!$this->rc->session->check_auth() && $this->rc->action != 'login' && $this->rc->task != 'login')
             {
                 $url = $this->login_error_url;
 

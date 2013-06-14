@@ -4,7 +4,7 @@
  +---------------------------------------------------------------------+
  | Clevercube External database plugin.                                |
  |                                                                     |
- | Copyright (c) 2012 Günter Kits                                      |
+ | Copyright (c) 2013 Günter Kits                                      |
  |                                                                     |
  | Permission is hereby granted, free of charge, to any person         |
  | obtaining a copy of this software and associated documentation      |
@@ -58,26 +58,30 @@ function get_external_db($profile)
 
 class cc_external_database extends rcube_plugin
 {
+    private $rc;
+    private $config;
+
     public function init()
     {
-        $rcmail = rcmail::get_instance();
-        $config = $this->api->config;
+        $this->rc = rcmail::get_instance();
+        $this->config = $this->rc->config;
+
         # Load distribution configuration.
         $this->load_config('config/config.inc.php.dist');
         # Overwrite configuration values with user defined ones.
         $this->load_config('config/config.inc.php');
 
-        if (empty($rcmail->external_databases))
+        if (empty($this->rc->external_databases))
             $databases = array();
         else
-            $databases = $rcmail->external_databases;
+            $databases = $this->rc->external_databases;
 
-        $profiles = $config->get('external_database');
+        $profiles = $this->config->get('external_database');
         if (!empty($profiles))
             foreach ($profiles as $name => $profile)
                 if (!array_key_exists($name, $databases))
                     $databases[$name] = $this->connect($profile);
-        $rcmail->external_databases = $databases;
+        $this->rc->external_databases = $databases;
     }
 
     private function connect($profile)
@@ -94,7 +98,11 @@ class cc_external_database extends rcube_plugin
         else if (!is_array($db_dsnw) && !preg_match('/\?new_link=true/', $db_dsnw))
             $db_dsnw .= '?new_link=true';
 
-        $db = new rcube_mdb2($db_dsnw, $db_dsnr, (bool) $db_persistent);
+        # Backwards compatibility with releases before 0.8.6.
+        if (class_exists('rcube_db'))
+            $db = rcube_db::factory($db_dsnw, $db_dsnr, (bool) $db_persistent);
+        else
+            $db = new rcube_mdb2($db_dsnw, $db_dsnr, (bool) $db_persistent);
         $db->set_debug((bool) $sql_debug);
         $db->db_connect($mode);
 
@@ -107,7 +115,8 @@ class cc_external_database extends rcube_plugin
         # and RC will die. This will also disable the possibility
         # to debug the database which is bad, but currently the only
         # solution which I could find to fix this recursion error.
-        unset($db->db_handle->options['debug_handler']);
+        if (!class_exists('rcube_db'))
+            unset($db->db_handle->options['debug_handler']);
         return $db;
     }
 }

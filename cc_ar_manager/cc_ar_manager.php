@@ -4,7 +4,7 @@
  +---------------------------------------------------------------------+
  | Clevercube Autoresponder manager plugin.                            |
  |                                                                     |
- | Copyright (c) 2012 Günter Kits                                      |
+ | Copyright (c) 2013 Günter Kits                                      |
  |                                                                     |
  | Permission is hereby granted, free of charge, to any person         |
  | obtaining a copy of this software and associated documentation      |
@@ -32,16 +32,22 @@ class cc_ar_manager extends rcube_plugin
 {
     public $task = 'settings';
 
+    private $rc;
+    private $config;
+    private $output;
+
     public function init()
     {
-        $output = $this->api->output;
-        $config = $this->api->config;
+        $this->rc = rcmail::get_instance();
+        $this->config = $this->rc->config;
+        $this->output = $this->rc->output;
+
         # Load distribution configuration.
         $this->load_config('config/config.inc.php.dist');
         # Overwrite configuration values with user defined ones.
         $this->load_config('config/config.inc.php');
-
-        $this->load_ar_api($config->get('autoresponder_api'));
+        # Load autoresponder backend.
+        $this->load_ar_api($this->config->get('autoresponder_api'));
 
         $this->add_texts('localization/');
         # Plug-in frame.
@@ -52,7 +58,7 @@ class cc_ar_manager extends rcube_plugin
         $this->register_action('plugin.cc_ar_manager-save', array($this, 'settings_save'));
         $this->include_script('skins/classic/cc_ar_manager.js');
 
-        $output->add_label(
+        $this->output->add_label(
             'cc_ar_manager.button',
             'cc_ar_manager.tooltip'
         );
@@ -60,8 +66,6 @@ class cc_ar_manager extends rcube_plugin
 
     private function load_ar_api($ar_api)
     {
-        $config = $this->api->config;
-
         if(empty($ar_api))
             raise_error(array('code' => 520,
                   'type' => 'php',
@@ -81,16 +85,14 @@ class cc_ar_manager extends rcube_plugin
         # Initialize the api.
         require($this->home."/api/$ar_api.php");
         $this->ar_api = new $ar_api($ar_api);
-        $this->ar_api->scheduled = $config->get('autoresponder_scheduled');
+        $this->ar_api->scheduled = $this->config->get('autoresponder_scheduled');
     }
 
     public function settings_display()
     {
-        $output = $this->api->output;
-
         $this->register_handler('plugin.body', array($this, 'settings_ui_frame'));
-        $output->set_pagetitle($this->gettext('title'));
-        $output->send('plugin');
+        $this->output->set_pagetitle($this->gettext('title'));
+        $this->output->send('plugin');
     }
 
     public function settings_ui_frame()
@@ -109,14 +111,10 @@ class cc_ar_manager extends rcube_plugin
 
     public function settings_ui()
     {
-
-        $output = $this->api->output;
-        $config = $this->api->config;
-
         $this->ar_api->api_load();
         $this->register_handler('plugin._ar_manager_form', array($this, 'settings_ui_form'));
 
-        $output->add_label(
+        $this->output->add_label(
             'cc_ar_manager.fill_message',
             'cc_ar_manager.illegal_from_date',
             'cc_ar_manager.illegal_until_date',
@@ -128,20 +126,17 @@ class cc_ar_manager extends rcube_plugin
             'cc_ar_manager.internal_error'
         );
 
-        $output->set_env('autoresponder_from_date', $this->ar_api->from_date);
-        $output->set_env('autoresponder_until_date', $this->ar_api->until_date);
-        $output->set_env('autoresponder_scheduled', $config->get('autoresponder_scheduled'));
-        $output->set_env('autoresponder_period', $config->get('autoresponder_period'));
-        $output->set_env('autoresponder_date_format', $config->get('autoresponder_date_format'));
-        $output->set_pagetitle($this->gettext('title'));
-        $output->send('cc_ar_manager.edit');
+        $this->output->set_env('autoresponder_from_date', $this->ar_api->from_date);
+        $this->output->set_env('autoresponder_until_date', $this->ar_api->until_date);
+        $this->output->set_env('autoresponder_scheduled', $this->config->get('autoresponder_scheduled'));
+        $this->output->set_env('autoresponder_period', $this->config->get('autoresponder_period'));
+        $this->output->set_env('autoresponder_date_format', $this->config->get('autoresponder_date_format'));
+        $this->output->set_pagetitle($this->gettext('title'));
+        $this->output->send('cc_ar_manager.edit');
     }
 
     public function settings_ui_form()
     {
-        $output = $this->api->output;
-        $config = $this->api->config;
-
         $table = new html_table(array('cols' => 2));
 
         $input = new html_radiobutton(array('name' => '_ar_status', 'label' => 'cc_ar_manager.turnoff', 'id' => 'rcmfd_ar_turnoff', 'value' => 0, 'onclick' => "cc_ar_manager_status(this);"));
@@ -152,7 +147,7 @@ class cc_ar_manager extends rcube_plugin
         $table->add('title', rcube_label('cc_ar_manager.turnon'));
         $table->add(null, $input->show($this->ar_api->status));
 
-        if ($config->get('autoresponder_scheduled'))
+        if ($this->config->get('autoresponder_scheduled'))
         {
             $input = new html_radiobutton(array('name' => '_ar_status', 'label' => 'cc_ar_manager.scheduled', 'id' => 'rcmfd_ar_scheduled', 'value' => 2, 'onclick' => "cc_ar_manager_status(this);"));
             $table->add('title', rcube_label('cc_ar_manager.scheduled'));
@@ -177,7 +172,7 @@ class cc_ar_manager extends rcube_plugin
 
         $content = $content.html::div(array('class' => 'boxcontent'), $table->show());
 
-        return $output->form_tag(array(
+        return $this->output->form_tag(array(
             'id' => 'rcmfd_ar_form',
             'name' => '_ar_form',
             'class' => 'propform',
@@ -187,15 +182,13 @@ class cc_ar_manager extends rcube_plugin
 
     public function settings_save()
     {
-        $output = $this->api->output;
-
         # Send the response to the callback event listener.
-        $output->command('plugin.cc_ar_manager-response', 
-                        $this->ar_api->api_save(
-                            get_input_value('_ar_status', RCUBE_INPUT_POST),
-                            get_input_value('_ar_from_date', RCUBE_INPUT_POST),
-                            get_input_value('_ar_until_date', RCUBE_INPUT_POST),
-                            get_input_value('_ar_message', RCUBE_INPUT_POST))
+        $this->output->command('plugin.cc_ar_manager-response', 
+            $this->ar_api->api_save(
+                get_input_value('_ar_status', RCUBE_INPUT_POST),
+                get_input_value('_ar_from_date', RCUBE_INPUT_POST),
+                get_input_value('_ar_until_date', RCUBE_INPUT_POST),
+                get_input_value('_ar_message', RCUBE_INPUT_POST))
         );
     }
 }

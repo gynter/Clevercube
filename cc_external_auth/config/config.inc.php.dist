@@ -4,7 +4,7 @@
  +---------------------------------------------------------------------+
  | Clevercube External authentication plugin.                          |
  |                                                                     |
- | Copyright (c) 2012 Günter Kits                                      |
+ | Copyright (c) 2013 Günter Kits                                      |
  |                                                                     |
  | Permission is hereby granted, free of charge, to any person         |
  | obtaining a copy of this software and associated documentation      |
@@ -37,7 +37,7 @@
 #   %d user's domain part (if present)
 #   %m return message
 # SECURITY: Sending user login names or other user related data
-# may be a security risk!
+# is a security risk!
 
 # Login page URL.
 # Possible values:

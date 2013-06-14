@@ -4,7 +4,7 @@
  +---------------------------------------------------------------------+
  | Clevercube plugins.                                                 |
  |                                                                     |
- | Copyright (c) 2012 Günter Kits                                      |
+ | Copyright (c) 2013 Günter Kits                                      |
  |                                                                     |
  | Permission is hereby granted, free of charge, to any person         |
  | obtaining a copy of this software and associated documentation      |
@@ -32,7 +32,8 @@ class clevercube extends rcube_plugin
 {
     public function init()
     {
-        $config = $this->api->config;
+        $config = rcmail::get_instance()->config;
+
         # Load distribution configuration.
         $this->load_config('config/config.inc.php.dist');
         # Overwrite configuration values with user defined ones.
