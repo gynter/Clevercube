@@ -61,11 +61,15 @@ class example extends ar_api
     # Default message.
     public $message;
 
+    # Roundcube instance.
+    private $rc;
+
     protected function init()
     {
         # This is initialization function which will be called when
         # the API is initialized.
         # You can put stuff like database connections here.
+        $this->rc = rcmail::get_instance();
     }
 
     # This functions is for loading the data for displaying in the form.
@@ -83,14 +87,14 @@ class example extends ar_api
         $message = $this->config->get('ar_api_example_message');
 
         # Write the output to the logs/debug log.
-        write_log('debug', "Autoresponder loaded: $status, $from_date, $until_date, $message");
+        write_log('debug', sprintf("Autoresponder loaded (%s): %s, %s, %s, %s", $this->rc->get_user_name(), $status, $from_date, $until_date, $message));
         return array($status, $from_date, $until_date, $message);
     }
 
     protected function save($status, $from_date, $until_date, $message)
     {
         # Write the output to the logs/debug log.
-        write_log('debug', "Autoresponder saved: $status, $from_date, $until_date, $message");
+        write_log('debug', sprintf("Autoresponder saved  (%s): %s, %s, %s, %s", $this->rc->get_user_name(), $status, $from_date, $until_date, $message));
         return true;
     }
 }
