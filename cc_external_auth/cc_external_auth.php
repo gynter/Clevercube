@@ -30,6 +30,8 @@
 
 class cc_external_auth extends rcube_plugin
 {
+    const ERROR_INVALID_SESSION = 0xFF;
+
     public $task = 'login|logout';
 
     private $rc;
@@ -46,7 +48,6 @@ class cc_external_auth extends rcube_plugin
         $this->load_config('config/config.inc.php');
 
         # Initialize hooks.
-        $this->add_hook('startup', array($this, 'startup'));
         $this->add_hook('authenticate', array($this, 'authenticate'));
         $this->add_hook('render_page', array($this, 'login_redirect'));
         $this->add_hook('login_failed', array($this,'login_failed'));
@@ -67,10 +68,14 @@ class cc_external_auth extends rcube_plugin
 
     private function location($url, $message, $args)
     {
+        $this->rc->kill_session();
+
         if ($url === false)
             return false;
+
         $user = $args['user'];
         $host = $args['host'];
+
         list($name, $domain) = explode('@', $user);
         $url = str_replace('%m', urlencode($message), $url);
         $url = str_replace('%u', urlencode($user), $url);
@@ -78,25 +83,22 @@ class cc_external_auth extends rcube_plugin
         $url = str_replace('%n', urlencode($name), $url);
         $url = str_replace('%d', urlencode($domain), $url);
 
-        $this->rc->kill_session();
         header("Location: $url");
         exit;
-    }
-
-    public function startup($args)
-    {
-        # Let's set some test cookies.
-        setcookie('rc_cc_ctest', 'Who Stole the Cookie from the Cookie Jar?', time() + 360);
-        return $args;
     }
 
     public function authenticate($args)
     {
         if (!empty($_POST['_user']) && !empty($_POST['_pass']) && $this->rc->action == 'login' && $this->rc->task == 'login')
-        {
             $args['valid'] = true;
-            $args['cookiecheck'] = false;
+
+        # RC's cookie check is broken, so lets make our own.
+        if ($args['cookiecheck'] && empty($_COOKIE))
+        {
+            $this->login_failed(array('code' => RCMAIL::ERROR_COOKIES_DISABLED));
+            $args['valid'] = false;
         }
+        unset($_SESSION['rc_sess_killed']);
         return $args;
     }
 
@@ -104,36 +106,19 @@ class cc_external_auth extends rcube_plugin
     {
         if ($args['template'] == 'login')
         {
-            $__task = rcube_utils::get_input_value('_task', rcube_utils::INPUT_GPC);
-            $url = $this->login_redirect_url;
-            $msg = '';
-
-            if ($__task == 'logout' && $_SESSION['rc_sess_destroyed'] === true)
+            if (rcube_utils::get_input_value('_task', rcube_utils::INPUT_GPC) == 'logout' && empty($_SESSION['rc_sess_killed']))
+                $_SESSION['rc_sess_killed'] = true;
+            else if (((!$this->rc->session->check_auth() && $this->rc->action != 'send'
+                && $this->rc->task != 'login'&& $_SESSION['user_id']) || $_REQUEST['_err'] == 'session') && empty($_SESSION['rc_sess_killed']))
             {
-                unset($_SESSION['rc_sess_destroyed']);
-                $url = $this->login_logout_url;
-                $msg = rcube_label('loggedout');
-            }
-            else if ($__task != 'logout' && empty($_SESSION['rc_sess_destroyed']))
-            {
-                if (((!$this->rc->session->check_auth() && $this->rc->action != 'send' && $this->rc->task != 'login'&& $_SESSION['user_id'])
-                        || $_REQUEST['_err'] == 'session'))
-                {
-                    $url = $this->login_error_url;
-                    $msg = rcube_label('sessionerror');
-                }
-                else if (!array_key_exists('rc_cc_ctest', $_COOKIE) || empty($_COOKIE))
-                {
-                    $url = $this->login_error_url;
-                    $msg = rcube_label('cookiesdisabled');
-                    $args = null;
-                }
-                if ($this->login_error_url === false)
-                    $_SESSION['rc_sess_destroyed'] = true;
+                $this->login_failed(array('code' => self::ERROR_INVALID_SESSION));
+                $_SESSION['rc_sess_killed'] = true;
             }
             else
-                unset($_SESSION['rc_sess_destroyed']);
-            $this->location($url, $msg, $args);
+            {
+                $this->location($this->login_redirect_url, '', $args);
+                unset($_SESSION['rc_sess_killed']);
+            }
         }
         return $args;
     }
@@ -141,18 +126,17 @@ class cc_external_auth extends rcube_plugin
     public function login_failed($args)
     {
         $error_labels = array(
-            RCMAIL::ERROR_STORAGE          => 'storageerror',
-            RCMAIL::ERROR_COOKIES_DISABLED => 'cookiesdisabled',
-            RCMAIL::ERROR_INVALID_REQUEST  => 'invalidrequest',
-            RCMAIL::ERROR_INVALID_HOST     => 'invalidhost',
+            RCMAIL::ERROR_STORAGE           => 'storageerror',
+            RCMAIL::ERROR_COOKIES_DISABLED  => 'cookiesdisabled',
+            RCMAIL::ERROR_INVALID_REQUEST   => 'invalidrequest',
+            RCMAIL::ERROR_INVALID_HOST      => 'invalidhost',
+            self::ERROR_INVALID_SESSION     => 'sessionerror',
         );
         $this->location($this->login_error_url, rcube_label(array_key_exists($args['code'], $error_labels) ? $error_labels[$args['code']] : 'loginfailed'), $args);
     }
 
     public function logout_redirect($args)
     {
-        if ($this->login_logout_url === false)
-            $_SESSION['rc_sess_destroyed'] = true;
         $this->location($this->login_logout_url, rcube_label('loggedout'), $args);
     }
 }

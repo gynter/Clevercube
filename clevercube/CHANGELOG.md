@@ -3,6 +3,7 @@ CHANGELOG Clevercube
 ========================================================================
 ------------------------------------------------------------------------
 
+- Fixed cookie check (#9) and cleaned up the redirection part;
 - Refreshing disabled error or logout page does not redirect to the
   login page (#7);
 - Logout task no longer redirects to the login page when the logout page
@@ -18,14 +19,14 @@ RELEASE 0.3
 
 RELEASE 0.2
 -----------------
-  - Various documentation fixes;
-  - Added missing `_task` input field to External authentication plug-in
-    example;
-  - Fixed the errors when login fails via the External authentication
-    plug-in.
+- Various documentation fixes;
+- Added missing `_task` input field to External authentication plug-in
+  example;
+- Fixed the errors when login fails via the External authentication
+  plug-in.
 
 RELEASE 0.1
 -----------------
-  - Initialization of the project;
-  - Added External database, External authentication and Autoresponder
-    manager plug-ins.
+- Initialization of the project;
+- Added External database, External authentication and Autoresponder
+  manager plug-ins.
