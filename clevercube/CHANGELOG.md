@@ -3,6 +3,10 @@ CHANGELOG Clevercube
 ========================================================================
 ------------------------------------------------------------------------
 
+- Refreshing disabled error or logout page does not redirect to the
+  login page (#7);
+- Logout task no longer redirects to the login page when the logout page
+  is disabled (#6);
 - Replace CRLF with LF and fix some spacing errors;
 - Add user login to AR plug-in example API.
 

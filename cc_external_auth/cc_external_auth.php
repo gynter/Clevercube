@@ -104,22 +104,35 @@ class cc_external_auth extends rcube_plugin
     {
         if ($args['template'] == 'login')
         {
+            $__task = rcube_utils::get_input_value('_task', rcube_utils::INPUT_GPC);
             $url = $this->login_redirect_url;
             $msg = '';
 
-            if (!$this->rc->session->check_auth() && $this->rc->action != 'login' && $this->rc->task != 'login')
+            if ($__task == 'logout' && $_SESSION['rc_sess_destroyed'] === true)
             {
-                $url = $this->login_error_url;
-
-                # Check if cookies are enabled.
-                if (!array_key_exists('rc_cc_ctest', $_COOKIE) || empty($_COOKIE))
+                unset($_SESSION['rc_sess_destroyed']);
+                $url = $this->login_logout_url;
+                $msg = rcube_label('loggedout');
+            }
+            else if ($__task != 'logout' && empty($_SESSION['rc_sess_destroyed']))
+            {
+                if (((!$this->rc->session->check_auth() && $this->rc->action != 'send' && $this->rc->task != 'login'&& $_SESSION['user_id'])
+                        || $_REQUEST['_err'] == 'session'))
                 {
+                    $url = $this->login_error_url;
+                    $msg = rcube_label('sessionerror');
+                }
+                else if (!array_key_exists('rc_cc_ctest', $_COOKIE) || empty($_COOKIE))
+                {
+                    $url = $this->login_error_url;
                     $msg = rcube_label('cookiesdisabled');
                     $args = null;
                 }
-                else
-                    $msg = rcube_label('sessionerror');
+                if ($this->login_error_url === false)
+                    $_SESSION['rc_sess_destroyed'] = true;
             }
+            else
+                unset($_SESSION['rc_sess_destroyed']);
             $this->location($url, $msg, $args);
         }
         return $args;
@@ -138,6 +151,8 @@ class cc_external_auth extends rcube_plugin
 
     public function logout_redirect($args)
     {
+        if ($this->login_logout_url === false)
+            $_SESSION['rc_sess_destroyed'] = true;
         $this->location($this->login_logout_url, rcube_label('loggedout'), $args);
     }
 }
