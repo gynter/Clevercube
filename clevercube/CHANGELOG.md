@@ -3,6 +3,9 @@ CHANGELOG Clevercube
 ========================================================================
 ------------------------------------------------------------------------
 
+- Replace CRLF with LF and fix some spacing errors;
+- Add user login to AR plug-in example API.
+
 RELEASE 0.3
 -----------------
 - Compatibility to 0.9 with backwards compatibility to 0.8 (#2, #3);

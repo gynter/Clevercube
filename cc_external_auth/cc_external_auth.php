@@ -136,7 +136,7 @@ class cc_external_auth extends rcube_plugin
         $this->location($this->login_error_url, rcube_label(array_key_exists($args['code'], $error_labels) ? $error_labels[$args['code']] : 'loginfailed'), $args);
     }
 
-    public function logout_redirect($args)  
+    public function logout_redirect($args)
     {
         $this->location($this->login_logout_url, rcube_label('loggedout'), $args);
     }

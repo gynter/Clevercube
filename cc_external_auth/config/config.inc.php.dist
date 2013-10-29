@@ -45,7 +45,7 @@
 #      null/false  Disable the redirection.
 $rcmail_config['external_auth_login'] = null;
 
-# Login error page URL. User will be redirected to this page 
+# Login error page URL. User will be redirected to this page
 # if logging in fails, session is illegal or session has timed out.
 # Possible values:
 #      URL         Web page url (http://www.example.org/login.php);

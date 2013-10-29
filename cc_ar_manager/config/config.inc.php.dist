@@ -41,7 +41,7 @@ $rcmail_config['autoresponder_period'] = 7;
 # The date format for scheduled autoresponder. This is only the format
 # for date displaying. The format "behind the scenes" is always
 # YYYY-MM-DD (yy-mm-dd).
-# Please see http://docs.jquery.com/UI/Datepicker/formatDate for 
+# Please see http://docs.jquery.com/UI/Datepicker/formatDate for
 # placeholders.
 $rcmail_config['autoresponder_date_format'] = 'yy-mm-dd';
 
