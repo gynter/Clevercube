@@ -13,10 +13,10 @@
         <email>gynter@kits.ee</email>
         <active>yes</active>
     </lead>
-    <date>2013-06-15</date>
+    <date>2013-10-31</date>
     <version>
-        <release>0.3</release>
-        <api>0.3</api>
+        <release>0.3.1</release>
+        <api>0.3.1</api>
     </version>
     <stability>
         <release>stable</release>
@@ -32,9 +32,6 @@
                 </dir>
                 <file name=".htaccess" role="data" />
                 <file name="clevercube.php" role="php" />
-                <file name="CHANGELOG.md" role="data" />
-                <file name="LICENSE" role="data" />
-                <file name="README.md" role="data" />
                 <file name="package.xml" role="data" />
             </dir>
             <dir name="cc_external_database">

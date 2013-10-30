@@ -2,7 +2,7 @@
 
 /*
  +---------------------------------------------------------------------+
- | Clevercube plugins.                                                 |
+ | Clevercube - Various plug-ins for the Roundcube webmail.            |
  |                                                                     |
  | Copyright (c) 2013 Günter Kits                                      |
  |                                                                     |

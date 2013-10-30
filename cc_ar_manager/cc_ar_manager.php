@@ -70,7 +70,7 @@ class cc_ar_manager extends rcube_plugin
             raise_error(array('code' => 520,
                   'type' => 'php',
                   'file' => __FILE__,
-                  'line' => __LINE__, 
+                  'line' => __LINE__,
                   'message' => "Autoresponder API not defined"),
             true, true);
 
@@ -78,7 +78,7 @@ class cc_ar_manager extends rcube_plugin
             raise_error(array('code' => 520,
                   'type' => 'php',
                   'file' => __FILE__,
-                  'line' => __LINE__, 
+                  'line' => __LINE__,
                   'message' => "Autoresponder API not found: $ar_api"),
             true, true);
 
@@ -183,7 +183,7 @@ class cc_ar_manager extends rcube_plugin
     public function settings_save()
     {
         # Send the response to the callback event listener.
-        $this->output->command('plugin.cc_ar_manager-response', 
+        $this->output->command('plugin.cc_ar_manager-response',
             $this->ar_api->api_save(
                 get_input_value('_ar_status', RCUBE_INPUT_POST),
                 get_input_value('_ar_from_date', RCUBE_INPUT_POST),

@@ -41,7 +41,7 @@ function get_external_db($profile)
         raise_error(array('code' => 520,
                           'type' => 'php',
                           'file' => __FILE__,
-                          'line' => __LINE__, 
+                          'line' => __LINE__,
                           'message' => "No external database profile defined"),
                     true, true);
 
@@ -49,7 +49,7 @@ function get_external_db($profile)
         raise_error(array('code' => 520,
                           'type' => 'php',
                           'file' => __FILE__,
-                          'line' => __LINE__, 
+                          'line' => __LINE__,
                           'message' => "External database profile $profile not found"),
                     true, true);
 

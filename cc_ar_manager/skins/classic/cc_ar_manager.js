@@ -23,7 +23,7 @@ if(window.rcmail)
             $('#rcmfd_ar_until_date').datepicker({ dateFormat: rcmail.env.autoresponder_date_format, altFormat: "yy-mm-dd", altField: "#rcmfd_ar_until_date_real" });
             cc_ar_manager_setdate()
         }
-        
+
         rcmail.addEventListener('plugin.cc_ar_manager-response', cc_ar_manager_response);
     });
 }

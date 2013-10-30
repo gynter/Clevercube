@@ -51,13 +51,13 @@ class example extends ar_api
     #   1 - enabled
     #   2 - scheduled
     public $status = 0;
-    
+
     # Default starting date in YYYY-MM-DD format.
     public $from_date;
 
     # Default ending date in YYYY-MM-DD format.
     public $until_date;
-    
+
     # Default message.
     public $message;
 
