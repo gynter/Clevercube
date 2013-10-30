@@ -22,7 +22,7 @@
         <release>stable</release>
         <api>stable</api>
     </stability>
-    <license uri="https://github.com/gynter/Clevercube/blob/master/clevercube/LICENSE">MIT</license>
+    <license uri="https://github.com/gynter/Clevercube/blob/master/LICENSE.md">MIT</license>
     <notes />
     <contents>
         <dir name="/" baseinstalldir="../">
