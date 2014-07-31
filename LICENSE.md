@@ -3,7 +3,7 @@ Clevercube License
 ========================================================================
 ------------------------------------------------------------------------
 
-Copyright (c) 2013 Günter Kits
+Copyright (c) 2014 Günter Kits
 
 This product is distributed under the Expat License. Please read
 through the paragraph "Expat License" for more information about our
