@@ -4,7 +4,7 @@
  +---------------------------------------------------------------------+
  | Clevercube Autoresponder manager plugin.                            |
  |                                                                     |
- | Copyright (c) 2014 Günter Kits                                      |
+ | Copyright (c) 2015 Günter Kits                                      |
  |                                                                     |
  | Permission is hereby granted, free of charge, to any person         |
  | obtaining a copy of this software and associated documentation      |

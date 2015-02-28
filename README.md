@@ -3,7 +3,7 @@ Clevercube - Various plug-ins for the Roundcube webmail
 ========================================================================
 ------------------------------------------------------------------------
 
-1.	Description
+1.  Description
 2.  Requirements
 3.  Installation
 4.  Configuration

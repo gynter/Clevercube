@@ -4,7 +4,9 @@ CHANGELOG Clevercube
 ------------------------------------------------------------------------
 
 - Pushed year to 2014 in LICENSE.md and headers;
-- Fix license URL in package.xml.
+- Fix license URL in package.xml;
+- Fix readme TOC indentation;
+- Change year to 2015 in LICENSE.md and headers.
 
 v0.3.1 (2013-10-31)
 -------------------
